@@ -1,9 +1,7 @@
 require_relative "../lib/day_03"
 require "pry"
 
-RSpec.describe Day03 do
-  context "part 1" do
-    it "finds the closest intersection" do
+RSpec.describe Day03 do context "part 1" do it "finds the closest intersection" do
       expect(Day03.wire_distance(
         %w(R8 U5 L5 D3),
         %w(U7 R6 D4 L4),
@@ -48,7 +46,7 @@ RSpec.describe Day03 do
     end
 
     it "returns the correct answers for the input file" do
-      expect(Day03.wire_steps).to eq 1264
+      expect(Day03.wire_steps).to eq 37390
     end
   end
 end
