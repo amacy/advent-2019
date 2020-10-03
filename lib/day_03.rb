@@ -1,11 +1,10 @@
 class Day03
-  def self.wire_distance(path_1, path_2)
+  def self.wire_distance(path_1=parse_file[0], path_2=parse_file[1])
     nodes_1 = to_nodes(path_1)
     nodes_2 = to_nodes(path_2)
     intersections = nodes_1 & nodes_2
-    binding.pry
     intersections.map do |intersection|
-      intersection.inject(&:+)
+      intersection.map(&:abs).inject(&:+)
     end.min
   end
 
@@ -47,9 +46,15 @@ class Day03
 
   def self.travel_range(start, distance)
     if distance < 0
-      (start - distance..start).to_a.reverse
+      (start + distance..start).to_a.reverse
     else
       start..start + distance
+    end
+  end
+
+  def self.parse_file
+    File.readlines("config/day_03.txt").map do |line|
+      line.split(",")
     end
   end
 end
