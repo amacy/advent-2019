@@ -15,11 +15,11 @@ RSpec.describe Intcode do
   end
 
   it "supports Optcode 3" do
-
+    expect(Intcode.run([3, 3, 99, 0])).to eq [3, 3, 99, 1]
   end
 
   it "supports Optcode 4" do
-
+    expect(Intcode.run([4, 3, 99, 76])).to eq [76]
   end
 
   it "supports the input with multiple optcodes" do

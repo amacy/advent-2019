@@ -2,44 +2,52 @@ class Intcode
   def self.run(list)
     new_list = list.dup
     old_list = list.dup
+    output = []
     current_address = 0
     loop do
-      opcode = old_list[current_address]
-      return old_list if opcode == 99
+      input = 1
+      abcde = old_list[current_address].to_s.rjust(5).split("").map(&:to_i)
+      param_3_mode, param_2_mode, param_1_mode, opcode_mode, opcode = abcde
+      if opcode == 9 && opcode_mode == 9
+        if output.length > 0
+          return output
+        else
+          return old_list
+        end
+      end
 
+      param_1 = old_list[current_address + 1]
+      param_2 = old_list[current_address + 2]
+      param_3 = old_list[current_address + 3]
 
-      if opcode == 1
-        parameter_to_read_1 = old_list[current_address + 1]
-        parameter_to_read_2 = old_list[current_address + 2]
-        parameter_to_write = old_list[current_address + 3]
+      if [1, 2].include?(opcode)
+        if param_1_mode == 0
+          value_1 = old_list[param_1]
+        else
+          value_1 = old_list[current_address + 1]
+        end
 
-        value_1 = old_list[parameter_to_read_1]
-        value_2 = old_list[parameter_to_read_2]
-        value_3 = value_1 + value_2
+        if param_2_mode == 0
+          value_2 = old_list[param_2]
+        else
+          value_2 = old_list[current_address + 2]
+        end
 
-        new_list[parameter_to_write] = value_3
-
-        current_address += 4
-      elsif opcode == 2
-        parameter_to_read_1 = old_list[current_address + 1]
-        parameter_to_read_2 = old_list[current_address + 2]
-        parameter_to_write = old_list[current_address + 3]
-
-        value_1 = old_list[parameter_to_read_1]
-        value_2 = old_list[parameter_to_read_2]
-        value_3 = value_1 * value_2
-
-        new_list[parameter_to_write] = value_3
+        if opcode == 1
+          new_list[param_3] = value_1 + value_2
+        else
+          new_list[param_3] = value_1 * value_2
+        end
 
         current_address += 4
       elsif opcode == 3
-        parameter_to_write = old_list[current_address + 1]
-        input = old_list[current_address + 2]
+        new_list[param_1] = input
 
-        new_list[parameter_to_write] = input
+        current_address += 2
       elsif opcode == 4
-        parameter_to_read = old_list[current_address + 1]
-        old_list[parameter_to_read]
+        output << old_list[param_1]
+
+        current_address += 2
       else
         raise "something went wrong"
       end
