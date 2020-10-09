@@ -8,7 +8,6 @@ class Day01
   end
 
   def self.total_fuel_needed(mass)
-    mass = mass.dup
     total = 0
     loop do
       return total if mass <= 0
