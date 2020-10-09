@@ -1,7 +1,7 @@
-class Day06
-  def self.orbits(input)
-    first_node = input.first.split(")").first
+require "set"
 
+class Day06
+  def self.orbits(input=parse_file)
     child_to_parent = {}
     parent_to_children = {}
     input.each do |pair|
@@ -18,26 +18,38 @@ class Day06
     end
 
     paths = []
-    current_path = []
     ends.each do |final_node|
+      current_path = []
       current_node = final_node
       loop do
-        current_path << current_node
-        if current_node == first_node
+        if current_node.nil?
           paths << current_path.dup
           current_path = []
           break
         end
+        current_path << current_node
         current_node = child_to_parent[current_node]
       end
     end
-    puts paths.inspect
 
     result = 0
+    counted_nodes = Set.new
     paths.each do |path|
-      result += (1..path.length - 1).to_a.sum
+      loop do
+        node = path.shift
+        if counted_nodes.include?(node)
+          break
+        else
+          counted_nodes << node
+          result += path.length
+        end
+      end
     end
 
     result
+  end
+
+  def self.parse_file
+    File.readlines("config/day_06.txt").map(&:strip)
   end
 end

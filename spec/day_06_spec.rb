@@ -7,6 +7,10 @@ RSpec.describe Day06 do
       input = %w[ COM)B B)C C)D D)E E)F B)G G)H D)I E)J J)K K)L ]
       expect(Day06.orbits(input)).to eq 42
     end
+
+    it "returns the correct number of orbits for the puzzle input" do
+      expect(Day06.orbits).to eq 241064
+    end
   end
 
   context "part 2" do
