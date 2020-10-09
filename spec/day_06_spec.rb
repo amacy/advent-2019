@@ -16,11 +16,11 @@ RSpec.describe Day06 do
   context "part 2" do
     it "returns the correct distance for the sample input" do
       input = %w[ COM)B B)C C)D D)E E)F B)G G)H D)I E)J J)K K)L K)YOU I)SAN ]
-      expect(Day06.distance_from_santa(input)).to eq 241064
+      expect(Day06.distance_from_santa(input)).to eq 4
     end
 
     it "returns the correct distance for the input file" do
-      expect(Day06.distance_from_santa).to eq 241064
+      expect(Day06.distance_from_santa).to eq 418
     end
   end
 end
