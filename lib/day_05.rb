@@ -3,7 +3,7 @@ require_relative "intcode"
 class Day05
   def self.run_program(input)
     program = parse_file
-    Intcode.run(program, input)
+    Intcode.new(program).run(input)
   end
 
   def self.parse_file

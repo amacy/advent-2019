@@ -2,7 +2,7 @@ require_relative "intcode"
 
 class Day02
   def self.run_program(list=parse_file)
-    Intcode.run(list)
+    Intcode.new(list).run
   end
 
   def self.parse_file(noun=12, verb=2)
