@@ -20,7 +20,7 @@ class Intcode
         end
       end
 
-      process_instruction(opcode, param_1_mode, param_2_mode, input)
+      return false if process_instruction(opcode, param_1_mode, param_2_mode, input) == false
     end
   end
 
@@ -40,6 +40,7 @@ class Intcode
       @mutated_program[param_3] = value_1 * value_2
       @current_address += 4
     when 3
+      return false if input.empty?
       @mutated_program[param_1] = input.shift
       @current_address += 2
     when 4
@@ -66,6 +67,8 @@ class Intcode
     else
       raise "invalid opcode"
     end
+
+    true
   end
 
   def value(param, param_mode)
