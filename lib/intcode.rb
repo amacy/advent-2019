@@ -41,6 +41,7 @@ class Intcode
       write_value(param_3, param_3_mode, value_1 * value_2)
       @current_address += 4
     when 3
+      return false if input.empty?
       write_value(param_1, param_1_mode, input.shift)
       @current_address += 2
     when 4
