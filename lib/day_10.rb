@@ -1,4 +1,6 @@
 require "set"
+require "active_support"
+require "active_support/core_ext/enumerable"
 
 class Day10
   Asteroid = Struct.new(
@@ -13,7 +15,22 @@ class Day10
     end
   end
 
-  def self.best_monitoring_station(map) asteroids = []
+  def self.best_monitoring_station(map)
+    asteroids = analyze_map(map)
+
+    max = all_monitoring_stations(asteroids).max
+    [
+      max,
+      asteroids.find { |a| a.visible_asteroid_locations.count == max }.location,
+    ]
+  end
+
+  def self.all_monitoring_stations(asteroids)
+    asteroids.map(&:visible_asteroid_locations).map(&:count)
+  end
+
+  def self.analyze_map(map)
+    asteroids = []
     graph = []
     map.each_with_index do |row, row_number|
       graph[row_number] ||= []
@@ -44,7 +61,7 @@ class Day10
       end
     end
 
-    asteroids.map(&:visible_asteroid_locations).map(&:count).max
+    asteroids
   end
 
   def self.populate_obscured_locations!(asteroids, length)
@@ -90,17 +107,23 @@ class Day10
   end
 
   def self.store_locations_for_different_rows_and_columns!(a_1, a_2, length)
+    range = 0..length - 1
+
     row_delta = a_2.row_number - a_1.row_number
     column_delta = a_2.column_number - a_1.column_number
 
-    if row_delta == column_delta
-      row_delta = column_delta = 1
+    if row_delta % column_delta == 0
+      row_delta /= column_delta.abs
+      column_delta /= column_delta.abs
+    elsif column_delta % row_delta == 0
+      row_delta /= row_delta.abs
+      column_delta /= row_delta.abs
     end
 
     current_row = a_2.row_number + row_delta
     current_column = a_2.column_number + column_delta
     loop do
-      break if current_row >= length || current_column < 0
+      break if range.exclude?(current_row) || range.exclude?(current_column)
 
       a_1.obscured_locations << [current_column, current_row]
 
@@ -111,7 +134,7 @@ class Day10
     current_row = a_1.row_number - row_delta
     current_column = a_1.column_number - column_delta
     loop do
-      break if current_row < 0 || current_column >= length
+      break if range.exclude?(current_row) || range.exclude?(current_column)
 
       a_2.obscured_locations << [current_column, current_row]
 

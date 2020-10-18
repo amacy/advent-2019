@@ -1,5 +1,6 @@
 require_relative "../lib/day_10"
 require "pry"
+require "set"
 
 RSpec.describe Day10 do
   context "part 1" do
@@ -11,7 +12,7 @@ RSpec.describe Day10 do
         "....#",
         "...##",
       ]
-      expect(Day10.best_monitoring_station(map_1)).to eq 8
+      expect(Day10.best_monitoring_station(map_1)).to eq [8, [3,4]]
 
       map_2 = [
         "......#.#.",
@@ -25,7 +26,7 @@ RSpec.describe Day10 do
         "##...#..#.",
         ".#....####",
       ]
-      expect(Day10.best_monitoring_station(map_2)).to eq 33
+      expect(Day10.best_monitoring_station(map_2)).to eq [33, [5, 8]]
 
       map_3 = [
         "#.#...#.#.",
@@ -39,7 +40,7 @@ RSpec.describe Day10 do
         "......#...",
         ".####.###.",
       ]
-      expect(Day10.best_monitoring_station(map_3)).to eq 35
+      expect(Day10.best_monitoring_station(map_3)).to eq [35, [1, 2]]
 
       map_4 = [
         ".#..#..###",
@@ -53,7 +54,7 @@ RSpec.describe Day10 do
         ".##...##.#",
         ".....#.#..",
       ]
-      expect(Day10.best_monitoring_station(map_4)).to eq 41
+      expect(Day10.best_monitoring_station(map_4)).to eq [41, [6, 3]]
 
       map_5 = [
         ".#..##.###...#######",
@@ -77,7 +78,55 @@ RSpec.describe Day10 do
         "#.#.#.#####.####.###",
         "###.##.####.##.#..##",
       ]
-      expect(Day10.best_monitoring_station(map_5)).to eq 210
+      expect(Day10.best_monitoring_station(map_5)).to eq [210, [11, 13]]
+    end
+
+    it "can calculate an entire sample map" do
+      map = [
+        ".#..#",
+        ".....",
+        "#####",
+        "....#",
+        "...##",
+      ]
+      asteroids = Day10.analyze_map(map)
+      expect(Day10.all_monitoring_stations(asteroids)).to eq [7, 7, 6, 7, 7, 7, 5, 7, 8, 7]
+    end
+
+    it "can calculate all blocked tiles in sample input" do
+      map = [
+        "#.........",
+        "...#......",
+        "...#..a...",
+        ".####....a",
+        "..#.c.b...",
+        ".....c....",
+        "..efd.c.gb",
+        ".......c..",
+        "....f...c.",
+        "...e..d..c",
+      ]
+      asteroids = Day10.analyze_map(map)
+      expect(asteroids[0].obscured_locations.sort).to eq [
+        [0, 0],
+        [6, 2],
+        [9, 3],
+        [4, 4],
+        [6, 4],
+        [5, 5],
+        [2, 6],
+        [3, 6],
+        [4, 6],
+        [6, 6],
+        [8, 6],
+        [9, 6],
+        [7, 7],
+        [4, 8],
+        [8, 8],
+        [3, 9],
+        [6, 9],
+        [9, 9],
+      ].sort
     end
   end
 
